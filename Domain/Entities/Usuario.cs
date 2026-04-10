@@ -19,11 +19,11 @@ namespace CorporateIdentityManager.Domain.Entities
         public Departamento? Departamento { get; protected set; }
         public Guid UnidadeOrganizacionalId { get; protected set;}
         public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set;}
-
+        public Usuario(){}
         protected Usuario(string nome, string sobrenome ,string cpf,
             string email, string telefone, DateTime dataNascimento,
             string upn,string employeeId,string dominio, string senhaHash,Guid organizacaoId,
-            Guid departamentoId, Guid unidadeOrganizacional)
+            Guid departamentoId, Guid unidadeOrganizacionalId)
             : base(nome, sobrenome, cpf, email, telefone, dataNascimento)
         {
             UPN = upn;
@@ -36,7 +36,7 @@ namespace CorporateIdentityManager.Domain.Entities
             ExpiracaoSenha = DateTime.UtcNow.AddDays(90);
             OrganizacaoId = organizacaoId;
             DepartamentoId = departamentoId;
-            UnidadeOrganizacional = unidadeOrganizacional;
+            UnidadeOrganizacionalId = unidadeOrganizacionalId;
         }
 
     }

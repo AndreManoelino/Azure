@@ -13,6 +13,7 @@ namespace CorporateIdentityManager.Domain.Entities
         
         public Guid? EnderecoId { get; protected set;} // Criando relacionamento entre as classes
         public Endereco? Endereco { get; protected set; } // Criando relacionamento entre as classes
+        public Pessoa() {}
         protected Pessoa(string nome, string sobrenome, string cpf, string email,
             string telefone, DateTime dataNascimento)
         {
