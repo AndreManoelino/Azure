@@ -1,0 +1,23 @@
+# Build
+bin/
+obj/
+
+# User files
+*.user
+*.suo
+
+# VSCode
+.vscode/
+
+# Rider / JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Environment files
+appsettings.Development.json
+
+# OS files
+.DS_Store
+Thumbs.db

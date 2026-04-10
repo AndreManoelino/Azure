@@ -1,0 +1,6 @@
+@CorporateIdentityManager_HostAddress = http://localhost:5199
+
+GET {{CorporateIdentityManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
