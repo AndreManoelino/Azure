@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CorporateIdentityManager.Migrations
 {
     [DbContext(typeof(ActiveDirectoryDbContext))]
-    [Migration("20260411012535_InitialCreate1")]
-    partial class InitialCreate1
+    [Migration("20260411013642_AddLicenca")]
+    partial class AddLicenca
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,6 +151,50 @@ namespace CorporateIdentityManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Grupos");
+                });
+
+            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Licenca", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Excluido")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("QuantidadeConsumida")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantidadeDisponivel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Licencas");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Organizacao", b =>
@@ -345,16 +389,11 @@ namespace CorporateIdentityManager.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("RolePermissaoId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PermissaoId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RolePermissaoId");
 
                     b.ToTable("RolePermissoes");
                 });
@@ -548,20 +587,16 @@ namespace CorporateIdentityManager.Migrations
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.RolePermissao", b =>
                 {
                     b.HasOne("CorporateIdentityManager.Domain.Entities.Permissao", "Permissao")
-                        .WithMany()
+                        .WithMany("RolePermissoes")
                         .HasForeignKey("PermissaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CorporateIdentityManager.Domain.Entities.Role", "Role")
-                        .WithMany()
+                        .WithMany("RolePermissoes")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.RolePermissao", null)
-                        .WithMany("RolePermissoes")
-                        .HasForeignKey("RolePermissaoId");
 
                     b.Navigation("Permissao");
 
@@ -655,14 +690,16 @@ namespace CorporateIdentityManager.Migrations
                     b.Navigation("UsuarioGrupos");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Role", b =>
-                {
-                    b.Navigation("UsuarioRoles");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.RolePermissao", b =>
+            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Permissao", b =>
                 {
                     b.Navigation("RolePermissoes");
+                });
+
+            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("RolePermissoes");
+
+                    b.Navigation("UsuarioRoles");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Usuario", b =>

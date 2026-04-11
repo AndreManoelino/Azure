@@ -3,6 +3,7 @@ using System;
 using CorporateIdentityManager.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CorporateIdentityManager.Migrations
 {
     [DbContext(typeof(ActiveDirectoryDbContext))]
-    partial class ActiveDirectoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260411013446_FixRolePermissao")]
+    partial class FixRolePermissao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,50 +151,6 @@ namespace CorporateIdentityManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Grupos");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Licenca", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativa")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("QuantidadeConsumida")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantidadeDisponivel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Licencas");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Organizacao", b =>

@@ -6,6 +6,7 @@ namespace CorporateIdentityManager.Domain.Entities
         public string Nome { get; protected set; } = string.Empty;
         public string Descricao { get; protected set; } = string.Empty;
         public string Codigo { get; protected set; } = string.Empty;
+        public ICollection<RolePermissao> RolePermissoes { get; protected set; } = new List<RolePermissao>();
 
         protected Permissao() { }
         public Permissao(string nome, string descricao, string codigo)

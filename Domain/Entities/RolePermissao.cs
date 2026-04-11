@@ -11,7 +11,7 @@ namespace CorporateIdentityManager.Domain.Entities
         public Guid PermissaoId { get; protected set; }
 
         public Permissao? Permissao { get; protected set; }
-        public ICollection<RolePermissao> RolePermissoes { get; protected set; } = new List<RolePermissao>();
+
         protected RolePermissao()
         {
         }

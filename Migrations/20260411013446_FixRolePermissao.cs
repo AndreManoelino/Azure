@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CorporateIdentityManager.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate1 : Migration
+    public partial class FixRolePermissao : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -115,7 +115,6 @@ namespace CorporateIdentityManager.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     RoleId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     PermissaoId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    RolePermissaoId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DataAtualizacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Ativo = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -130,11 +129,6 @@ namespace CorporateIdentityManager.Migrations
                         principalTable: "Permissoes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolePermissoes_RolePermissoes_RolePermissaoId",
-                        column: x => x.RolePermissaoId,
-                        principalTable: "RolePermissoes",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_RolePermissoes_Roles_RoleId",
                         column: x => x.RoleId,
@@ -184,11 +178,6 @@ namespace CorporateIdentityManager.Migrations
                 name: "IX_RolePermissoes_RoleId",
                 table: "RolePermissoes",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermissoes_RolePermissaoId",
-                table: "RolePermissoes",
-                column: "RolePermissaoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsuarioGrupos_GrupoId",

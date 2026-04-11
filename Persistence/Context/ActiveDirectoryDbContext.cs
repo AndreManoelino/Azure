@@ -29,5 +29,6 @@ namespace CorporateIdentityManager.Persistence.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermissao> RolePermissoes { get; set; }
         public DbSet<UsuarioRole> UsuarioRoles { get; set; }
+        public DbSet<Licenca> Licencas { get; set; }
     }
 }
