@@ -18,7 +18,10 @@ namespace CorporateIdentityManager.Domain.Entities
         public Guid DepartamentoId { get; protected set;} 
         public Departamento? Departamento { get; protected set; }
         public Guid UnidadeOrganizacionalId { get; protected set;}
-        public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set;}
+        public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set; }
+        public ICollection<UsuarioGrupo> UsuarioGrupos { get; protected set; } = new List<UsuarioGrupo>();
+        public ICollection<UsuarioRole> UsuarioRoles { get; protected set; } = new List<UsuarioRole>();
+        
         public Usuario(){}
         protected Usuario(string nome, string sobrenome ,string cpf,
             string email, string telefone, DateTime dataNascimento,
