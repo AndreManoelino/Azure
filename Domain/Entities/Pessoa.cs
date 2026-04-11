@@ -11,8 +11,8 @@ namespace CorporateIdentityManager.Domain.Entities
         public string Telefone { get; protected set; } = string.Empty;
         public DateTime DataNascimento { get; protected set; }
         
-        public Guid? EnderecoId { get; protected set;} // Criando relacionamento entre as classes
-        public Endereco? Endereco { get; protected set; } // Criando relacionamento entre as classes
+        public Guid? EnderecoId { get; protected set;} 
+        public Endereco? Endereco { get; protected set; } 
         public Pessoa() {}
         protected Pessoa(string nome, string sobrenome, string cpf, string email,
             string telefone, DateTime dataNascimento)

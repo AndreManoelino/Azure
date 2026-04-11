@@ -3,6 +3,7 @@ using System;
 using CorporateIdentityManager.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CorporateIdentityManager.Migrations
 {
     [DbContext(typeof(ActiveDirectoryDbContext))]
-    partial class ActiveDirectoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260411121425_AddGrupoLicenca")]
+    partial class AddGrupoLicenca
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -475,39 +478,6 @@ namespace CorporateIdentityManager.Migrations
                     b.ToTable("UnidadesOrganizacionais");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UnidadeOrganizacionalGrupo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid>("GrupoId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("UnidadeOrganizacionalId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GrupoId");
-
-                    b.HasIndex("UnidadeOrganizacionalId");
-
-                    b.ToTable("UnidadeOrganizacionalGrupos");
-                });
-
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UsuarioGrupo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -542,56 +512,6 @@ namespace CorporateIdentityManager.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("UsuarioGrupos");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UsuarioLicenca", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("DataAtribuicao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid?>("GrupoId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid?>("GrupoOrigemId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("HerdadaDeGrupo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid>("LicencaId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Manual")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GrupoOrigemId");
-
-                    b.HasIndex("LicencaId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("UsuarioLicencas");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UsuarioRole", b =>
@@ -758,25 +678,6 @@ namespace CorporateIdentityManager.Migrations
                     b.Navigation("UnidadePai");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UnidadeOrganizacionalGrupo", b =>
-                {
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Grupo", "Grupo")
-                        .WithMany()
-                        .HasForeignKey("GrupoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.UnidadeOrganizacional", "UnidadeOrganizacional")
-                        .WithMany()
-                        .HasForeignKey("UnidadeOrganizacionalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Grupo");
-
-                    b.Navigation("UnidadeOrganizacional");
-                });
-
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UsuarioGrupo", b =>
                 {
                     b.HasOne("CorporateIdentityManager.Domain.Entities.Grupo", "Grupo")
@@ -792,31 +693,6 @@ namespace CorporateIdentityManager.Migrations
                         .IsRequired();
 
                     b.Navigation("Grupo");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.UsuarioLicenca", b =>
-                {
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Grupo", "GrupoOrigem")
-                        .WithMany()
-                        .HasForeignKey("GrupoOrigemId");
-
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Licenca", "Licenca")
-                        .WithMany()
-                        .HasForeignKey("LicencaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GrupoOrigem");
-
-                    b.Navigation("Licenca");
 
                     b.Navigation("Usuario");
                 });

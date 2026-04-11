@@ -15,6 +15,7 @@ namespace CorporateIdentityManager.Domain.Entities
         public int QuantidadeConsumida { get; protected set; }
 
         public bool Ativa { get; protected set; }
+        public ICollection<GrupoLicenca> GrupoLicencas { get; protected set; } = new List<GrupoLicenca>();
 
         protected Licenca() { }
 

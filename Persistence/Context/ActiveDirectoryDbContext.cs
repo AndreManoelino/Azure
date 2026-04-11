@@ -30,5 +30,8 @@ namespace CorporateIdentityManager.Persistence.Context
         public DbSet<RolePermissao> RolePermissoes { get; set; }
         public DbSet<UsuarioRole> UsuarioRoles { get; set; }
         public DbSet<Licenca> Licencas { get; set; }
+        public DbSet<GrupoLicenca> GrupoLicencas { get; set; }
+        public DbSet<UsuarioLicenca> UsuarioLicencas { get; set; }
+        public DbSet<UnidadeOrganizacionalGrupo> UnidadeOrganizacionalGrupos { get; set; }
     }
 }
