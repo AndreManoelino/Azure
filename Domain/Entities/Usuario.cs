@@ -15,15 +15,14 @@ namespace CorporateIdentityManager.Domain.Entities
         public DateTime ExpiracaoSenha { get; protected set; }
         public Guid OrganizacaoId { get; protected set; }
         public Organizacao? Organizacao { get; protected set; }
-        public Guid DepartamentoId { get; protected set;} 
+        public Guid DepartamentoId { get; protected set;}
         public Departamento? Departamento { get; protected set; }
         public Guid UnidadeOrganizacionalId { get; protected set;}
         public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set; }
         public ICollection<UsuarioGrupo> UsuarioGrupos { get; protected set; } = [];
         public ICollection<UsuarioRole> UsuarioRoles { get; protected set; } = [];
-        
         public Usuario(){}
-        protected Usuario(string nome, string sobrenome ,string cpf,
+        public Usuario(string nome, string sobrenome ,string cpf,
             string email, string telefone, DateTime dataNascimento,
             string upn,string employeeId,string dominio, string senhaHash,Guid organizacaoId,
             Guid departamentoId, Guid unidadeOrganizacionalId)
@@ -34,7 +33,7 @@ namespace CorporateIdentityManager.Domain.Entities
             Dominio = dominio;
             SenhaHash = senhaHash;
             MFAHabilitado = false;
-            ContaBloqueada = false; 
+            ContaBloqueada = false;
             TentativasLogin = 0;
             ExpiracaoSenha = DateTime.UtcNow.AddDays(90);
             OrganizacaoId = organizacaoId;

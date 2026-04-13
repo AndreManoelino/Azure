@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using CorporateIdentityManager.Persistence.Context;
-
+using CorporateIdentityManager.Application.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 #region Services
@@ -22,12 +22,15 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Corporate Identity Manager API",
-        Version = "v1",
+        Title = "Simulaçao API AZURE",
+        Version = "Simulação",
         Description = "Enterprise Azure Entra ID / Active Directory / Intune Simulation"
     });
 });
-
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<OrganizacaoService>();
+builder.Services.AddScoped<GrupoService>();
+builder.Services.AddScoped<LicenciamentoService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",

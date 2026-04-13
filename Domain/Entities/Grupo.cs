@@ -1,5 +1,5 @@
 using CorporateIdentityManager.Domain.Abstracts;
-using CorporateIdentityManager.domain.Enums;
+using CorporateIdentityManager.Domain.Enums;
 
 namespace CorporateIdentityManager.Domain.Entities
 {
