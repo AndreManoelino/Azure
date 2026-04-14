@@ -1,5 +1,6 @@
 using CorporateIdentityManager.Domain.Entities;
 using CorporateIdentityManager.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -50,10 +51,10 @@ namespace CorporateIdentityManager.Application.Services
                 email,
                 telefone,
                 dataNascimento,
-                email, // UPN
+                email,
                 Guid.NewGuid().ToString(),
                 "empresa.local",
-                "senha_hash_fake",
+                BCrypt.Net.BCrypt.HashPassword("hash123"),
                 organizacaoId,
                 departamentoId,
                 unidadeOrganizacionalId
@@ -75,6 +76,17 @@ namespace CorporateIdentityManager.Application.Services
         {
             return _context.Set<Usuario>().FindAsync(id).AsTask();
         }
-
+        public async Task<Usuario?> ObterPorUpn(string upn)
+        {
+            return await _context.Set<Usuario>()
+                .Include(u => u.UsuarioGrupos)
+                .ThenInclude(ug => ug.Grupo)
+                .FirstOrDefaultAsync(u => u.UPN == upn);
+        }
+        public async Task Atualizar(Usuario usuario)
+        {
+            _context.Usuarios.Update(usuario);
+            await _context.SaveChangesAsync();
+        }
     }
 }

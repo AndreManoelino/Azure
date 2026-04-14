@@ -19,12 +19,13 @@ namespace CorporateIdentityManager.Domain.Entities
         public Departamento? Departamento { get; protected set; }
         public Guid UnidadeOrganizacionalId { get; protected set;}
         public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set; }
-        public ICollection<UsuarioGrupo> UsuarioGrupos { get; protected set; } = [];
-        public ICollection<UsuarioRole> UsuarioRoles { get; protected set; } = [];
+        public ICollection<UsuarioGrupo> UsuarioGrupos { get; protected set; } = new List<UsuarioGrupo>();
+        public ICollection<UsuarioRole> UsuarioRoles { get; protected set; } = new List<UsuarioRole>();
+        public bool PrimeiroLogin { get; protected set; }
         public Usuario(){}
-        public Usuario(string nome, string sobrenome ,string cpf,
+        public Usuario(string nome, string sobrenome, string cpf,
             string email, string telefone, DateTime dataNascimento,
-            string upn,string employeeId,string dominio, string senhaHash,Guid organizacaoId,
+            string upn, string employeeId, string dominio, string senhaHash, Guid organizacaoId,
             Guid departamentoId, Guid unidadeOrganizacionalId)
             : base(nome, sobrenome, cpf, email, telefone, dataNascimento)
         {
@@ -39,6 +40,13 @@ namespace CorporateIdentityManager.Domain.Entities
             OrganizacaoId = organizacaoId;
             DepartamentoId = departamentoId;
             UnidadeOrganizacionalId = unidadeOrganizacionalId;
+            PrimeiroLogin = true;
+        }
+        public void DefinirNovaSenha(string novaSenha)
+        {
+            SenhaHash = novaSenha;
+            PrimeiroLogin = false;
+            TentativasLogin = 0;
         }
 
     }
