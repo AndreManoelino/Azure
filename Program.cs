@@ -2,7 +2,14 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using CorporateIdentityManager.Persistence.Context;
 using CorporateIdentityManager.Application.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 
 #region Services
 
@@ -27,10 +34,15 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Enterprise Azure Entra ID / Active Directory / Intune Simulation"
     });
 });
+
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<OrganizacaoService>();
 builder.Services.AddScoped<GrupoService>();
 builder.Services.AddScoped<LicenciamentoService>();
+
+
+builder.Services.AddScoped<TokenService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -40,6 +52,25 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
+});
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
 });
 
 #endregion
@@ -58,6 +89,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

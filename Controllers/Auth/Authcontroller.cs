@@ -10,10 +10,11 @@ namespace CorporateIdentityManager.Controllers.Auth
     public class AuthController : ControllerBase
     {
         private readonly UsuarioService _usuarioService;
-
-        public AuthController(UsuarioService usuarioService)
+        private readonly TokenService _tokenService;
+        public AuthController(UsuarioService usuarioService, TokenService tokenService)
         {
             _usuarioService = usuarioService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -31,16 +32,19 @@ namespace CorporateIdentityManager.Controllers.Auth
             {
                 return Unauthorized(new
                 {
-                    mensagem = "É necessário alterar a senha !"
+                    mensagem = "É necessário alterar a senha"
                 });
             }
 
-            var response = new LoginResponse
+            var token = _tokenService.GerarToken(usuario);
+
+            var response = new
             {
-                Nome = usuario.Nome,
-                Email = usuario.Email,
-                UPN = usuario.UPN,
-                Grupos = usuario.UsuarioGrupos
+                nome = usuario.Nome,
+                email = usuario.Email,
+                upn = usuario.UPN,
+                token,
+                grupos = usuario.UsuarioGrupos
                     .Select(ug => ug.Grupo.Nome)
                     .ToList()
             };
@@ -53,7 +57,7 @@ namespace CorporateIdentityManager.Controllers.Auth
             var usuario = await _usuarioService.ObterPorUpn(request.Upn);
             if (usuario == null)
                 return NotFound("Usuário não encontrado");
-            if (usuario.SenhaHash != request.SenhaAtual)
+            if (!BCrypt.Net.BCrypt.Verify(request.SenhaAtual, usuario.SenhaHash))
                 return Unauthorized("Senha atual inválida");
             var novaSenhaHash = BCrypt.Net.BCrypt.HashPassword(request.NovaSenha);
             usuario.DefinirNovaSenha(novaSenhaHash);

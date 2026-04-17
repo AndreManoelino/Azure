@@ -85,7 +85,12 @@ namespace CorporateIdentityManager.Application.Services
         }
         public async Task Atualizar(Usuario usuario)
         {
-            _context.Usuarios.Update(usuario);
+            var existente = await _context.Set<Usuario>()
+                .FirstAsync(u => u.Id == usuario.Id);
+
+            if (existente == null) return;
+
+            existente.DefinirNovaSenha(usuario.SenhaHash);
             await _context.SaveChangesAsync();
         }
     }

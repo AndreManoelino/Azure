@@ -31,7 +31,7 @@ namespace CorporateIdentityManager.Controllers
                 request.Email,
                 Guid.NewGuid().ToString(),
                 "empresa.com",
-                "hash123",
+                BCrypt.Net.BCrypt.HashPassword("123456"),
                 request.OrganizacaoId,
                 request.DepartamentoId,
                 request.UnidadeOrganizacionalId
