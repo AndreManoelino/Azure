@@ -5,12 +5,10 @@ namespace CorporateIdentityManager.Persistence.Context
 {
     public class ActiveDirectoryDbContext : DbContext
     {
-        public ActiveDirectoryDbContext(
-            DbContextOptions<ActiveDirectoryDbContext> options)
+        public ActiveDirectoryDbContext(DbContextOptions<ActiveDirectoryDbContext> options)
             : base(options)
         {
         }
-
         public DbSet<Pessoa> Pessoas { get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }

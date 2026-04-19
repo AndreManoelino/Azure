@@ -9,7 +9,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+var jwtKey = builder.Configuration["Jwt:Key"];
+
+if (string.IsNullOrEmpty(jwtKey))
+    throw new Exception("Jwt:Key não configurado no appsettings.json");
+
+var key = Encoding.ASCII.GetBytes(jwtKey);
 
 #region Services
 
@@ -56,7 +61,7 @@ builder.Services.AddSwaggerGen(options =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });
@@ -111,7 +116,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 

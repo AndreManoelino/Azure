@@ -6,18 +6,11 @@ using System.Threading.Tasks;
 
 namespace CorporateIdentityManager.Application.Services
 {
-    public class UsuarioService
+    public class UsuarioService(ActiveDirectoryDbContext context, GrupoService grupoService)
     {
-        private readonly ActiveDirectoryDbContext _context;
-        private readonly GrupoService _grupoService;
+        private readonly ActiveDirectoryDbContext _context = context;
+        private readonly GrupoService _grupoService = grupoService;
 
-        public UsuarioService(
-            ActiveDirectoryDbContext context,
-            GrupoService grupoService)
-        {
-            _context = context;
-            _grupoService = grupoService;
-        }
 
         public async Task<Guid> CriarUsuario(Pessoa usuario, Guid unidadeOrganizacionalId)
         {
@@ -76,9 +69,9 @@ namespace CorporateIdentityManager.Application.Services
         {
             return _context.Set<Usuario>().FindAsync(id).AsTask();
         }
-        public async Task<Usuario?> ObterPorUpn(string upn)
+        public Task<Usuario?> ObterPorUpn(string upn)
         {
-            return await _context.Set<Usuario>()
+            return _context.Set<Usuario>()
                 .Include(u => u.UsuarioGrupos)
                 .ThenInclude(ug => ug.Grupo)
                 .FirstOrDefaultAsync(u => u.UPN == upn);

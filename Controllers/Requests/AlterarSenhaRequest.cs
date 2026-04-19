@@ -5,5 +5,7 @@ namespace CorporateIdentityManager.Controllers.Requests
         public string Upn { get; set; } = string.Empty;
         public string SenhaAtual { get; set; } = string.Empty;
         public string NovaSenha { get; set; } = string.Empty;
+        public string Senha { get; internal set; } = string.Empty;
+
     }
 }

@@ -1,16 +1,14 @@
 using CorporateIdentityManager.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace CorporateIdentityManager.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DepartamentoController : ControllerBase
+    public class GrupoController : ControllerBase
     {
         private readonly ActiveDirectoryDbContext _context;
-
-        public DepartamentoController(ActiveDirectoryDbContext context)
+        public GrupoController(ActiveDirectoryDbContext context)
         {
             _context = context;
         }
@@ -18,8 +16,9 @@ namespace CorporateIdentityManager.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var departamentos = await _context.Departamentos.ToListAsync();
-            return Ok(departamentos);
+            var grupos = await _context.Grupos.ToListAsync();
+            return Ok(grupos);
         }
+
     }
 }

@@ -11,12 +11,12 @@ namespace CorporateIdentityManager.Controllers.Auth
     {
         private readonly UsuarioService _usuarioService;
         private readonly TokenService _tokenService;
+
         public AuthController(UsuarioService usuarioService, TokenService tokenService)
         {
             _usuarioService = usuarioService;
             _tokenService = tokenService;
         }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -24,7 +24,8 @@ namespace CorporateIdentityManager.Controllers.Auth
 
             if (usuario == null)
                 return Unauthorized("Usuário não encontrado");
-
+            if (usuario.ContaBloqueada)
+                return Unauthorized("Conta bloqueada. Procure o administrador.");
             if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuario.SenhaHash))
                 return Unauthorized("Senha inválida");
 
@@ -44,9 +45,10 @@ namespace CorporateIdentityManager.Controllers.Auth
                 email = usuario.Email,
                 upn = usuario.UPN,
                 token,
-                grupos = usuario.UsuarioGrupos
-                    .Select(ug => ug.Grupo.Nome)
-                    .ToList()
+                grupos = usuario.UsuarioGrupos?
+                    .Where(ug => ug.Grupo != null)
+                    .Select(ug => ug.Grupo!.Nome)
+                    .ToList() ?? []
             };
 
             return Ok(response);
@@ -57,8 +59,11 @@ namespace CorporateIdentityManager.Controllers.Auth
             var usuario = await _usuarioService.ObterPorUpn(request.Upn);
             if (usuario == null)
                 return NotFound("Usuário não encontrado");
-            if (!BCrypt.Net.BCrypt.Verify(request.SenhaAtual, usuario.SenhaHash))
-                return Unauthorized("Senha atual inválida");
+            if (string.IsNullOrEmpty(usuario.SenhaHash) ||
+                !BCrypt.Net.BCrypt.Verify(request.SenhaAtual, usuario.SenhaHash))
+            {
+                return Unauthorized("Senha inválida");
+            }
             var novaSenhaHash = BCrypt.Net.BCrypt.HashPassword(request.NovaSenha);
             usuario.DefinirNovaSenha(novaSenhaHash);
             await _usuarioService.Atualizar(usuario);
@@ -67,5 +72,6 @@ namespace CorporateIdentityManager.Controllers.Auth
                 mensagem = "Senha alterada "
             });
         }
+
     }
 }

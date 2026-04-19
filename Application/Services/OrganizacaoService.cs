@@ -6,18 +6,10 @@ using CorporateIdentityManager.Domain.Entities;
 using CorporateIdentityManager.Domain.Enums;
 namespace CorporateIdentityManager.Application.Services
 {
-    public class OrganizacaoService
+    public class OrganizacaoService(ActiveDirectoryDbContext context, GrupoService grupoService)
     {
-        private readonly ActiveDirectoryDbContext _context;
-        private readonly GrupoService _grupoService;
-
-        public OrganizacaoService(
-            ActiveDirectoryDbContext context,
-            GrupoService grupoService)
-        {
-            _context = context;
-            _grupoService = grupoService;
-        }
+        private readonly ActiveDirectoryDbContext _context = context;
+        private readonly GrupoService _grupoService = grupoService;
 
         public async Task<Guid> CriarOrganizacao(string nome, string cnpj, string dominio, string tenantId)
         {

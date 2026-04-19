@@ -12,29 +12,29 @@ namespace CorporateIdentityManager.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UsuarioService _usuarioService;
         private readonly ActiveDirectoryDbContext _context;
+        private readonly UsuarioService _usuarioService;
 
-        public UsuarioController(
-            UsuarioService usuarioService,
-            ActiveDirectoryDbContext context)
+        public UsuarioController(ActiveDirectoryDbContext context, UsuarioService usuarioService)
         {
-            _usuarioService = usuarioService;
             _context = context;
+            _usuarioService = usuarioService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioRequest request)
         {
             var cpfValido = CpfHelper.ApenasNumeros(request.CPF);
-            if(!CpfHelper.EhValido(request.CPF))
+
+            if (!CpfHelper.EhValido(request.CPF))
                 return BadRequest("CPF inválido");
 
             var cpfExistente = await _context.Pessoas
                 .FirstOrDefaultAsync(p => p.Cpf == cpfValido);
-            if(cpfExistente != null)
 
+            if (cpfExistente != null)
                 return BadRequest("Já existe um usuário com esse CPF");
+
             var usuarioExistente = await _context.Pessoas
                 .FirstOrDefaultAsync(u => u.Email == request.Email);
 
@@ -50,8 +50,14 @@ namespace CorporateIdentityManager.Controllers
             var unidade = await _context.UnidadesOrganizacionais
                 .FirstOrDefaultAsync(u => u.Nome == request.UnidadeNome);
 
+            var grupo = await _context.Grupos
+                .FirstOrDefaultAsync(g => g.Nome == request.GrupoNome);
+
             if (organizacao == null || departamento == null || unidade == null)
                 return BadRequest("Organização, Departamento ou Unidade inválidos");
+
+            if (grupo == null)
+                return BadRequest("Grupo inválido");
 
             var usuario = new Usuario(
                 request.Nome,
@@ -70,6 +76,10 @@ namespace CorporateIdentityManager.Controllers
             );
 
             var usuarioId = await _usuarioService.CriarUsuario(usuario, unidade.Id);
+            var usuarioGrupo = new UsuarioGrupo(usuarioId, grupo.Id);
+
+            _context.UsuarioGrupos.Add(usuarioGrupo);
+            await _context.SaveChangesAsync();
 
             return Ok(new { usuarioId });
         }

@@ -7,30 +7,37 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CorporateIdentityManager.Application.Services
 {
-    public class TokenService
-    {
-        private readonly IConfiguration _configuration;
+    public class TokenService (IConfiguration configuration)
 
-        public TokenService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+    {
+        private readonly IConfiguration _configuration = configuration;
+
 
         public string GerarToken(Usuario usuario)
         {
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var jwtKey = _configuration["Jwt:Key"];
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, usuario.Nome),
-                new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim("UPN", usuario.UPN),
-                new Claim("UserId", usuario.Id.ToString())
-            };
+            if (string.IsNullOrWhiteSpace(jwtKey))
+                throw new Exception("JWT Key não configurada no appsettings");
 
-            foreach (var grupo in usuario.UsuarioGrupos)
+            var key = Encoding.ASCII.GetBytes(jwtKey);
+
+            List<Claim> claims =
+            [
+                new(ClaimTypes.Name, usuario.Nome),
+                new(ClaimTypes.Email, usuario.Email),
+                new("UPN", usuario.UPN),
+                new("UserId", usuario.Id.ToString())
+            ];
+
+            var grupos = usuario.UsuarioGrupos?
+                .Where(ug => ug.Grupo != null)
+                .Select(ug => ug.Grupo!.Nome)
+                .ToList() ?? [];
+
+            foreach (var nomeGrupo in grupos)
             {
-                claims.Add(new Claim("Grupo", grupo.Grupo.Nome));
+                claims.Add(new Claim("Grupo", nomeGrupo));
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
