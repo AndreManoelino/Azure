@@ -86,5 +86,28 @@ namespace CorporateIdentityManager.Application.Services
             existente.DefinirNovaSenha(usuario.SenhaHash);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Usuario>> BuscarPorNome(string nome)
+        {
+            return await _context.Set<Usuario>()
+                .Where(u => u.Nome.Contains(nome) || u.Sobrenome.Contains(nome))
+                .ToListAsync();
+        }
+
+        public async Task BloquearUsuario(Guid id)
+        {
+            var usuario = await _context.Set<Usuario>().FindAsync(id);
+            if (usuario == null) return;
+
+            usuario.BloquearConta();
+
+            // Remove as licenças financeiras para evitar gastos
+            var licencas = _context.UsuarioLicencas.Where(l => l.UsuarioId == id);
+            _context.UsuarioLicencas.RemoveRange(licencas);
+
+            // Nota: Os grupos foram mantidos, já que atuam como "cargos" e servem de histórico
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

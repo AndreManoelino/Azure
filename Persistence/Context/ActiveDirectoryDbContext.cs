@@ -31,5 +31,11 @@ namespace CorporateIdentityManager.Persistence.Context
         public DbSet<GrupoLicenca> GrupoLicencas { get; set; }
         public DbSet<UsuarioLicenca> UsuarioLicencas { get; set; }
         public DbSet<UnidadeOrganizacionalGrupo> UnidadeOrganizacionalGrupos { get; set; }
+        public DbSet<DocumentoRelatorio> DocumentosRelatorios { get; set; }
+        public DbSet<FotoPerfil> FotosPerfil { get; set; }
+        public DbSet<Vaga> Vagas { get; set; }
+        public DbSet<Candidato> Candidatos { get; set; }
+        public DbSet<Equipamento> Equipamentos { get; set; }
+        public DbSet<Holerite> Holerites { get; set; }
     }
 }

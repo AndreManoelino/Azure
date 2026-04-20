@@ -1,179 +1,57 @@
- Active Directory, Entra ID e Intune
+# Enterprise Active Directory & Intune Simulator
 
+Um sistema completo de simulação de infraestrutura corporativa, construído para replicar comportamentos e processos reais encontrados na administração de Microsoft Entra ID (Azure AD), Active Directory on-premises e Microsoft Intune. 
 
+Além da gestão centralizada de identidades, a aplicação atua como um ERP departamental escalável, controlando permissões avançadas (RBAC) e processos interdepartamentais de uma corporação moderna.
 
-Com base na minha vivência e estudos voltados para administração de ambientes corporativos utilizando **Active Directory**, **Microsoft Entra ID** e **Microsoft Intune**, desenvolvi este projeto com o objetivo de simular em software diversos processos e estruturas presentes no gerenciamento de identidade empresarial.
+## Arquitetura e Tecnologias
 
-A proposta é transformar conhecimentos práticos de infraestrutura e administração de diretórios em uma aplicação desenvolvida em **.NET 8**, aplicando conceitos de arquitetura limpa, modelagem orientada a objetos e boas práticas de desenvolvimento backend.
+- **Backend:** C# com ASP.NET Core 8 Web API
+- **Banco de Dados:** MySQL (Pomelo EntityFramework Core)
+- **Frontend:** React (Vite) + Vanilla CSS Modular
+- **Autenticação:** JWT com Políticas Baseadas em Grupos (Roles)
+- **Segurança:** Hashing de Senhas (BCrypt) e interceptação de First-Login
 
-O sistema busca representar de forma estruturada cenários comuns encontrados em ambientes corporativos, como provisionamento de usuários, organização hierárquica, autenticação, controle de permissões, políticas de segurança e gerenciamento de dispositivos.
+## Capacidades do Sistema
 
----
+A arquitetura foi modelada visando separação em domínios para representar perfeitamente o ambiente de uma empresa.
 
-## Tecnologias Utilizadas
+### 1. Gestão de Identidades (Identity Management)
+- **Provisionamento:** Criação de colaboradores atrelados a Organizações (Tenants), Departamentos e Unidades Organizacionais (OU).
+- **Hard & Soft Delete:** Bloqueio de contas em vez de exclusão física para conformidade legal (Compliance).
+- **Revogação de Licenças:** Rotinas automáticas de revogação de licenças financeiras em caso de bloqueio.
+- **Forced Password Change:** Fluxo obrigatório de alteração de senha no primeiro login.
 
-* ASP.NET Core Web API (.NET 8)
-* Entity Framework Core 8
-* MySQL
-* Pomelo EntityFramework Provider
-* Swagger / OpenAPI
-* JWT Authentication
-* AutoMapper
-* FluentValidation
-* MediatR
-* BCrypt
-* Serilog
+### 2. Controle de Acesso Baseado em Cargos (RBAC e Menus Dinâmicos)
+Os acessos são governados diretamente pelos Grupos do AD. 
+A interface e as ações backend respondem dinamicamente a grupos predefinidos:
+- **Administração / TI Senior / Builtin:** Acesso global. Provisionamento, diretório de colaboradores e bloqueios de contas de alto risco.
+- **TI Junior:** Permissão apenas para consulta de diretório de identidades (Read-only security roles).
+- **Supervisores / Coordenadores:** Módulo focado em aprovações de relatórios operacionais.
+- **Recursos Humanos:** Módulos de auditoria e admissão.
+- **Manutenção:** Módulo prático contendo upload de evidências físicas (Fotos Base64) e relatórios operacionais.
+- **Administrativo Financeiro:** Gestão de custos, relatórios de licenciamentos e cloud billing.
 
----
+### 3. Modelagem de Dados Relacional
+Além da estrutura organizacional padrão (Departamentos, OUs, Grupos e Políticas), o domínio engloba:
+- **`DocumentoRelatorio`**: Fluxos de envio e aprovação (Workflow) ligando a base operacional aos coordenadores.
+- **`FotoPerfil`**: Sistema de Storage (simulado via Blob em Base64) integrando inspeções físicas ou perfis ao Active Directory.
 
-## Objetivo da Aplicação
+## Como Executar
 
-O sistema está sendo estruturado para simular recursos encontrados em ambientes empresariais reais, permitindo aplicar conceitos administrativos e técnicos relacionados a identidade e segurança digital.
-
-Principais objetivos da aplicação:
-
-* Simular gerenciamento de usuários corporativos
-* Representar estruturas hierárquicas organizacionais
-* Controlar departamentos e unidades organizacionais
-* Implementar autenticação corporativa e políticas de acesso
-* Simular grupos de segurança e permissões
-* Estruturar futura gestão de dispositivos e políticas de compliance
-* Simular mecanismos de MFA e segurança de identidade
-
----
-
-## Estrutura Atual do Projeto
-
-A arquitetura foi organizada com separação de responsabilidades em camadas, visando escalabilidade e manutenção:
-
+### 1. Backend (API)
 ```bash
-Domain/
-Application/
-Infrastructure/
-Persistence/
-Controllers/
-Configurations/
+# Navegue até a pasta raiz
+dotnet ef database update  # Roda as migrações (Cria as tabelas no MySQL)
+dotnet run                 # Inicia o servidor ASP.NET Core (porta 5199/7268)
 ```
 
----
+### 2. Frontend (Dashboard React)
+```bash
+# Abra um novo terminal e navegue para a pasta frontend
+cd frontend
+npm install
+npm run dev                # Inicia o painel na porta 5173
+```
 
-## Modelagem Implementada Até o Momento
-
-### BaseEntity
-
-Classe base responsável por fornecer propriedades comuns para todas as entidades:
-
-* Id único (GUID)
-* Data de criação
-* Data de atualização
-* Controle de ativo/inativo
-* Soft Delete lógico
-
----
-
-### Pessoa
-
-Entidade responsável por armazenar informações pessoais:
-
-* Nome
-* Sobrenome
-* CPF
-* E-mail
-* Telefone
-* Data de nascimento
-* Endereço relacionado
-
----
-
-### Usuario
-
-Extensão da entidade Pessoa contendo informações corporativas:
-
-* UPN/Login
-* Employee ID
-* Domínio
-* Senha Hash
-* MFA
-* Tentativas de Login
-* Bloqueio de Conta
-* Expiração de Senha
-* Último Login
-* Organização vinculada
-* Departamento vinculado
-* Unidade Organizacional vinculada
-
----
-
-### Endereco
-
-Entidade separada para controle de localização:
-
-* CEP
-* Rua
-* Número
-* Bairro
-* Cidade
-* Estado
-* País
-* Complemento
-
----
-
-### Organizacao
-
-Representa a empresa/tenant principal:
-
-* Nome
-* CNPJ
-* Domínio Principal
-* Tenant ID
-
----
-
-### Departamento
-
-Representa divisões internas da organização:
-
-* Nome
-* Descrição
-* Organização vinculada
-
----
-
-### UnidadeOrganizacional
-
-Simula estrutura hierárquica de OU/UO:
-
-* Nome
-* Descrição
-* Departamento vinculado
-* Unidade Pai
-* Hierarquia recursiva
-
----
-
-## Próximas Implementações Planejadas
-
-* Sistema de Grupos e Permissões
-* RBAC (Role Based Access Control)
-* Licenciamento Microsoft por Grupo
-* MFA Completo
-* Controle de Sessões/Login
-* Gestão de Máquinas/Endpoints
-* Simulação de Políticas do Intune
-* Restrição de Softwares/Instalações
-* Compliance e Inventário de Dispositivos
-
----
-
-## Finalidade Técnica
-
-Além do desenvolvimento da aplicação, este projeto também tem como finalidade consolidar conhecimentos práticos em:
-
-* Modelagem de domínio orientada a objetos
-* Arquitetura backend enterprise
-* Simulação de estruturas de diretório corporativo
-* Regras de autenticação/autorização
-* Integração entre conceitos de infraestrutura e desenvolvimento de software
-
----
+O projeto continuará evoluindo para abraçar simulações de Intune (MDM/MAM) com conformidade de endpoints e restrições automatizadas.

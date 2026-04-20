@@ -3,6 +3,7 @@ using System;
 using CorporateIdentityManager.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,62 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CorporateIdentityManager.Migrations
 {
     [DbContext(typeof(ActiveDirectoryDbContext))]
-    partial class ActiveDirectoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420191626_MapeamentoDepartamentos")]
+    partial class MapeamentoDepartamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Candidato", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("CurriculoTexto")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("NomeCompleto")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StatusProcesso")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid>("VagaId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VagaId");
-
-                    b.ToTable("Candidatos");
-                });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Departamento", b =>
                 {
@@ -201,54 +156,6 @@ namespace CorporateIdentityManager.Migrations
                     b.ToTable("Enderecos");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Equipamento", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ServiceTag")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid?>("UsuarioId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Equipamentos");
-                });
-
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.FotoPerfil", b =>
                 {
                     b.Property<Guid>("Id")
@@ -366,49 +273,6 @@ namespace CorporateIdentityManager.Migrations
                     b.HasIndex("LicencaId");
 
                     b.ToTable("GrupoLicencas");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Holerite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("AnoReferencia")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("MesReferencia")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<decimal>("ValorLiquido")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Holerites");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Licenca", b =>
@@ -852,45 +716,6 @@ namespace CorporateIdentityManager.Migrations
                     b.ToTable("UsuarioRoles");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Vaga", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Departamento")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("Excluido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Vagas");
-                });
-
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Usuario", b =>
                 {
                     b.HasBaseType("CorporateIdentityManager.Domain.Entities.Pessoa");
@@ -947,17 +772,6 @@ namespace CorporateIdentityManager.Migrations
                     b.HasDiscriminator().HasValue("Usuario");
                 });
 
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Candidato", b =>
-                {
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Vaga", "Vaga")
-                        .WithMany()
-                        .HasForeignKey("VagaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vaga");
-                });
-
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Departamento", b =>
                 {
                     b.HasOne("CorporateIdentityManager.Domain.Entities.Organizacao", "Organizacao")
@@ -976,15 +790,6 @@ namespace CorporateIdentityManager.Migrations
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Equipamento", b =>
-                {
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Usuario");
                 });
@@ -1017,17 +822,6 @@ namespace CorporateIdentityManager.Migrations
                     b.Navigation("Grupo");
 
                     b.Navigation("Licenca");
-                });
-
-            modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Holerite", b =>
-                {
-                    b.HasOne("CorporateIdentityManager.Domain.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("CorporateIdentityManager.Domain.Entities.Pessoa", b =>

@@ -70,6 +70,9 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<OrganizacaoService>();
 builder.Services.AddScoped<GrupoService>();
 builder.Services.AddScoped<LicenciamentoService>();
+builder.Services.AddScoped<RelatorioService>();
+builder.Services.AddScoped<FotoPerfilService>();
+builder.Services.AddScoped<RecrutamentoService>();
 
 
 builder.Services.AddScoped<TokenService>();
@@ -116,7 +119,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 

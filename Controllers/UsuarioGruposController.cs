@@ -1,4 +1,3 @@
-
 using CorporateIdentityManager.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,20 +6,26 @@ namespace CorporateIdentityManager.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrganizacaoController : ControllerBase
+    public class UsuarioGruposController : ControllerBase
     {
         private readonly ActiveDirectoryDbContext _context;
 
-        public OrganizacaoController(ActiveDirectoryDbContext context)
+        public UsuarioGruposController(ActiveDirectoryDbContext context)
         {
             _context = context;
         }
-
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var organizacoes = await _context.Organizacoes.ToListAsync();
-            return Ok(organizacoes);
+            var usuarioGrupos = await _context.UsuarioGrupos.ToListAsync();
+            return Ok(usuarioGrupos.Select(ug => new
+            {
+                ug.Id,
+                ug.UsuarioId,
+                ug.GrupoId,
+                ug.DataAssociacao
+            }));
         }
+
     }
 }

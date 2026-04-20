@@ -21,6 +21,8 @@ namespace CorporateIdentityManager.Domain.Entities
         public UnidadeOrganizacional? UnidadeOrganizacional { get; protected set; }
         public ICollection<UsuarioGrupo> UsuarioGrupos { get; protected set; } = [];
         public ICollection<UsuarioRole> UsuarioRoles { get; protected set; } = [];
+        public ICollection<DocumentoRelatorio> Relatorios { get; protected set; } = [];
+        public FotoPerfil? FotoPerfil { get; protected set; }
         public bool PrimeiroLogin { get; protected set; }
         public Usuario(){}
         public Usuario(string nome, string sobrenome, string cpf,
@@ -49,5 +51,17 @@ namespace CorporateIdentityManager.Domain.Entities
             TentativasLogin = 0;
         }
 
+        public void BloquearConta()
+        {
+            ContaBloqueada = true;
+            Desativar();
+        }
+
+        // Ponto de checagem para o RH/TI saber a última vez que o peão logou
+        public void AtualizarUltimoLogin()
+        {
+            UltimoLogin = DateTime.UtcNow;
+            Atualizar();
+        }
     }
 }

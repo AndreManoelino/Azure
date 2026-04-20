@@ -83,6 +83,28 @@ namespace CorporateIdentityManager.Controllers
 
             return Ok(new { usuarioId });
         }
+        [HttpGet("buscar/{nome}")]
+        public async Task<IActionResult> BuscarPorNome(string nome)
+        {
+            var usuarios = await _usuarioService.BuscarPorNome(nome);
+            if (!usuarios.Any())
+                return NotFound("Nenhum usuário encontrado com esse nome.");
+
+            return Ok(usuarios.Select(u => new { u.Id, u.Nome, u.Sobrenome, u.Email, u.Ativo, u.ContaBloqueada }));
+        }
+
+        [HttpPost("{id}/bloquear")]
+        public async Task<IActionResult> BloquearUsuario(Guid id)
+        {
+            var usuario = await _usuarioService.ObterPorId(id);
+            if (usuario == null)
+                return NotFound("Usuário não encontrado.");
+
+            await _usuarioService.BloquearUsuario(id);
+
+            return Ok(new { message = "Usuário bloqueado e licenças removidas com sucesso." });
+        }
+
         [HttpGet]
         public async Task<IActionResult> ObterUsuario(Guid id)
         {
@@ -92,6 +114,29 @@ namespace CorporateIdentityManager.Controllers
                 return NotFound();
 
             return Ok(usuario);
+        }
+
+        [HttpPost("{usuarioId}/delegar-grupo/{grupoNome}")]
+        public async Task<IActionResult> DelegarGrupo(Guid usuarioId, string grupoNome)
+        {
+            var usuario = await _context.Usuarios.Include(u => u.UsuarioGrupos).FirstOrDefaultAsync(u => u.Id == usuarioId);
+            if (usuario == null) return NotFound("Usuário não encontrado.");
+
+            var grupo = await _context.Grupos.FirstOrDefaultAsync(g => g.Nome == grupoNome);
+            if (grupo == null)
+            {
+                grupo = new Grupo(grupoNome, "Criado dinamicamente", true, false, false, (CorporateIdentityManager.Domain.Enums.TipoGrupo)0);
+                _context.Grupos.Add(grupo);
+                await _context.SaveChangesAsync();
+            }
+
+            if (!usuario.UsuarioGrupos.Any(ug => ug.GrupoId == grupo.Id))
+            {
+                _context.UsuarioGrupos.Add(new UsuarioGrupo(usuario.Id, grupo.Id));
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new { message = $"Usuário adicionado ao grupo {grupoNome} com sucesso." });
         }
     }
 }
